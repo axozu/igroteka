@@ -986,6 +986,10 @@ html {
 
 .modal__content {
   display: grid;
+  /* Строки по содержимому: иначе при длинном описании сетка сжимает строку обложки
+     (у неё overflow: hidden → мин. высота 0), и картинка наезжает на текст. */
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: var(--space-5);
   overflow-y: auto;
   padding: var(--space-4);
