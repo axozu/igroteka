@@ -7,6 +7,23 @@ import { formatAge, formatPlayers, formatPlayTime, formatPrice, formatRating } f
 export const FAVORITE_LABELS = Object.freeze({ add: 'Добавить в избранное', remove: 'Убрать из избранного' });
 
 /**
+ * Обновляет состояние ♥ и «Сравнить» в уже отрисованной карточке (без пересоздания).
+ * @param {HTMLElement} card — article.card
+ * @param {{ isFavorite: boolean, inCompare: boolean }} flags
+ */
+export function updateCardToggles(card, { isFavorite, inCompare }) {
+  const favorite = card.querySelector('[data-action="favorite"]');
+  const compare = card.querySelector('[data-action="compare"]');
+  if (favorite && favorite.getAttribute('aria-pressed') !== String(isFavorite)) {
+    favorite.setAttribute('aria-pressed', String(isFavorite));
+    favorite.setAttribute('aria-label', isFavorite ? FAVORITE_LABELS.remove : FAVORITE_LABELS.add);
+  }
+  if (compare && compare.getAttribute('aria-pressed') !== String(inCompare)) {
+    compare.setAttribute('aria-pressed', String(inCompare));
+  }
+}
+
+/**
  * Карточка игры: article.card[data-id]. Заголовок — кнопка data-action="open",
  * ♥ и «Сравнить» — data-action="favorite" | "compare" (обрабатываются делегированием).
  * @param {object} game

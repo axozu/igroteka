@@ -16,10 +16,17 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="container">
+    <div class="container site-header__inner">
       <a class="site-logo" href="./">ИГРОТЕКА</a>
+      <button id="favorites-button" class="icon-button site-header__favorites" type="button" aria-controls="favorites-drawer" aria-expanded="false" aria-label="Избранное">
+        <span aria-hidden="true">♥</span>
+        <span id="favorites-count" class="badge" aria-hidden="true" hidden>0</span>
+      </button>
     </div>
   </header>
+
+  <dialog id="favorites-drawer" class="drawer"></dialog>
+  <div id="toasts" class="toast-region" role="status" aria-live="polite"></div>
 
   <main id="catalog" class="container" aria-labelledby="catalog-title">
     <h1 id="catalog-title" class="catalog__title">Каталог настольных игр</h1>
