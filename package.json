@@ -1,0 +1,14 @@
+{
+  "name": "igroteka",
+  "version": "0.1.0",
+  "description": "ИГРОТЕКА — интерактивный каталог настольных игр (статический сайт для GitHub Pages)",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  }
+}
