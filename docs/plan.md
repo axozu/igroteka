@@ -155,13 +155,13 @@
   - `renderCard(game, { isFavorite, inCompare, genresById }): HTMLElement` — `article.card[data-id]`; заголовок — `button[data-action="open"]`; ♥ и «Сравнить» — `data-action="favorite" | "compare"`.
   - `mountCatalog(root, store): void` — состояния loading / error / ready (пустые — этап 6).
 
-- [ ] **Шаг 1: Тесты `dom.test.mjs`** (чистые функции): `isSafeHref` — `javascript:alert(1)`, `JaVaScRiPt:…`, `data:text/html,…`, ` javascript:` с пробелом → `false`; `https://github.com/x`, `./?game=azul`, `#about` → `true`; `debounce` вызывает функцию один раз (`mock.timers`).
-- [ ] **Шаг 2: Тест-сканер `no-dangerous-dom.test.mjs`** (§8.3): по всем `public/**/*.js` — нет `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `eval(`, `new Function(`, `setTimeout(`/`setInterval(` со строковым первым аргументом. Самопроверка: функция сканирования находит нарушение во временной строке-примере.
-- [ ] **Шаг 3:** FAIL → **Шаг 4:** реализовать `dom.js` → PASS.
-- [ ] **Шаг 5: Реализовать** `cover.js`, `card.js`, `catalog.js`, `api.js`, `main.js`: store → `mountCatalog` → `loadCatalog()` → `setState({status:'ready', games, genres})` или `{status:'error', error}`; «Повторить» перезапускает загрузку; сетка перерисовывается только при изменении списка видимых id; события — делегированием на контейнер сетки.
-- [ ] **Шаг 6: Стили** карточки, сетки (1/2/3/4 колонки), скелетона (без анимации при reduced-motion), блока ошибки.
-- [ ] **Шаг 7:** `npm test` → PASS.
-- [ ] **Ручной чеклист:**
+- [x] **Шаг 1: Тесты `dom.test.mjs`** (чистые функции): `isSafeHref` — `javascript:alert(1)`, `JaVaScRiPt:…`, `data:text/html,…`, ` javascript:` с пробелом → `false`; `https://github.com/x`, `./?game=azul`, `#about` → `true`; `debounce` вызывает функцию один раз (`mock.timers`).
+- [x] **Шаг 2: Тест-сканер `no-dangerous-dom.test.mjs`** (§8.3): по всем `public/**/*.js` — нет `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `eval(`, `new Function(`, `setTimeout(`/`setInterval(` со строковым первым аргументом. Самопроверка: функция сканирования находит нарушение во временной строке-примере.
+- [x] **Шаг 3:** FAIL → **Шаг 4:** реализовать `dom.js` → PASS.
+- [x] **Шаг 5: Реализовать** `cover.js`, `card.js`, `catalog.js`, `api.js`, `main.js`: store → `mountCatalog` → `loadCatalog()` → `setState({status:'ready', games, genres})` или `{status:'error', error}`; «Повторить» перезапускает загрузку; сетка перерисовывается только при изменении списка видимых id; события — делегированием на контейнер сетки.
+- [x] **Шаг 6: Стили** карточки, сетки (1/2/3/4 колонки), скелетона (без анимации при reduced-motion), блока ошибки.
+- [x] **Шаг 7:** `npm test` → PASS.
+- [x] **Ручной чеклист:**
   - 20 карточек с разными обложками;
   - DevTools → Network → «Slow 3G»: скелетоны;
   - переименовать `games.json` → «Не удалось загрузить каталог» + «Повторить»; вернуть имя → «Повторить» работает;
@@ -169,7 +169,7 @@
   - вписать в `title` одной игры `<img src=x onerror=alert(1)>` → на карточке видно как текст, alert нет; вернуть;
   - ширины 360 / 768 / 1024 / 1440 → 1 / 2 / 3 / 4 колонки, без горизонтальной прокрутки;
   - всё то же по адресу `/igroteka/`; консоль без нарушений CSP и Trusted Types.
-- [ ] **Ритуал завершения** → `этап 5: каталог, карточки, загрузка и ошибка` → СТОП.
+- [x] **Ритуал завершения** → `этап 5: каталог, карточки, загрузка и ошибка` → СТОП.
 
 ## Этап 6. Поиск, фильтры, сортировка в интерфейсе
 
