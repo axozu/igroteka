@@ -7,7 +7,9 @@ import { mountSearch } from './ui/search.js';
 import { mountFilters } from './ui/filters.js';
 import { mountToolbar } from './ui/toolbar.js';
 import { createFavoritesService } from './favorites-service.js';
-import { mountHeaderFavorites } from './ui/header.js';
+import { mountHeader, mountHeaderFavorites } from './ui/header.js';
+import { mountThemeToggle } from './ui/theme.js';
+import { mountAbout } from './ui/about.js';
 import { mountFavoritesDrawer } from './ui/favorites-drawer.js';
 import { showToast } from './ui/toast.js';
 import { createCompareService } from './compare-service.js';
@@ -52,6 +54,8 @@ async function load() {
   }
 }
 
+mountThemeToggle(document.getElementById('theme-toggle'), store, storage);
+mountHeader(document.querySelector('.site-header'), store);
 mountSearch(document.getElementById('search-input'), store);
 mountFilters(document.getElementById('filters'), store);
 mountToolbar(document.getElementById('toolbar'), store);
@@ -61,4 +65,6 @@ mountFavoritesDrawer(document.getElementById('favorites-drawer'), store, favorit
 mountCatalog(document.getElementById('catalog-root'), store, { onRetry: load, onAction: onCardAction });
 mountGameModal(document.getElementById('game-modal'), store, onCardAction);
 mountCompare(document.getElementById('compare-bar'), document.getElementById('compare-dialog'), store, compare);
+mountAbout(document.getElementById('about-stats'), store);
+document.getElementById('footer-year').textContent = String(new Date().getFullYear());
 load();

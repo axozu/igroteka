@@ -9,19 +9,37 @@
   <meta name="color-scheme" content="light dark">
   <title>ИГРОТЕКА — каталог настольных игр</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <script src="./js/theme-init.js"></script>
   <link rel="stylesheet" href="./css/tokens.css">
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/components.css">
   <script type="module" src="./js/main.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#catalog">Перейти к каталогу</a>
+
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="site-logo" href="./">ИГРОТЕКА</a>
-      <button id="favorites-button" class="icon-button site-header__favorites" type="button" aria-controls="favorites-drawer" aria-expanded="false" aria-label="Избранное">
-        <span aria-hidden="true">♥</span>
-        <span id="favorites-count" class="badge" aria-hidden="true" hidden>0</span>
-      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Основная навигация">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="#catalog">Каталог</a></li>
+          <li><a class="site-nav__link" href="#about">О проекте</a></li>
+        </ul>
+      </nav>
+      <div id="header-search-slot" class="site-header__search"></div>
+      <div class="site-header__actions">
+        <button id="theme-toggle" class="icon-button" type="button" aria-label="Тема: как в системе">
+          <span class="theme-icon" aria-hidden="true">◐</span>
+        </button>
+        <button id="favorites-button" class="icon-button site-header__favorites" type="button" aria-controls="favorites-drawer" aria-expanded="false" aria-label="Избранное">
+          <span aria-hidden="true">♥</span>
+          <span id="favorites-count" class="badge" aria-hidden="true" hidden>0</span>
+        </button>
+        <button class="icon-button burger" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Меню">
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -32,9 +50,11 @@
 
   <main id="catalog" class="container" aria-labelledby="catalog-title">
     <h1 id="catalog-title" class="catalog__title">Каталог настольных игр</h1>
-    <div class="search">
-      <label class="visually-hidden" for="search-input">Поиск по названию</label>
-      <input id="search-input" class="input search__input" type="search" placeholder="Поиск по названию" autocomplete="off" enterkeyhint="search" maxlength="100">
+    <div id="catalog-search-slot" class="catalog-search-slot">
+      <div class="search">
+        <label class="visually-hidden" for="search-input">Поиск по названию</label>
+        <input id="search-input" class="input search__input" type="search" placeholder="Поиск по названию" autocomplete="off" enterkeyhint="search" maxlength="100">
+      </div>
     </div>
     <div class="catalog-layout">
       <aside id="filters" class="filters" aria-label="Фильтры"></aside>
@@ -48,16 +68,45 @@
     </div>
   </main>
 
-  <section id="about" class="container" aria-labelledby="about-title">
-    <h2 id="about-title">О проекте</h2>
-    <p>Раздел «О проекте» появится на этапе 9.</p>
+  <section id="about" class="about" aria-labelledby="about-title">
+    <div class="container">
+      <h2 id="about-title" class="about__title">О проекте</h2>
+      <p class="about__lead">
+        ИГРОТЕКА — каталог реальных настольных игр, сделанный как учебный проект для портфолио.
+        Здесь можно найти игру по названию, подобрать её под компанию, время и бюджет,
+        сохранить понравившиеся и сравнить до трёх игр между собой.
+      </p>
+      <ul class="advantages">
+        <li class="advantage">
+          <h3 class="advantage__title">Быстрый подбор</h3>
+          <p>Поиск, шесть групп фильтров и сортировка работают мгновенно, а ссылка сохраняет выбор.</p>
+        </li>
+        <li class="advantage">
+          <h3 class="advantage__title">Без лишнего</h3>
+          <p>Нет регистрации, рекламы и трекеров: избранное и сравнение хранятся только в вашем браузере.</p>
+        </li>
+        <li class="advantage">
+          <h3 class="advantage__title">Для всех</h3>
+          <p>Удобно на телефоне и компьютере, со светлой и тёмной темой и управлением с клавиатуры.</p>
+        </li>
+      </ul>
+      <dl id="about-stats" class="stats" aria-label="Каталог в цифрах"></dl>
+    </div>
   </section>
 
   <div id="compare-bar" class="compare-bar" role="region" aria-label="Сравнение" hidden></div>
 
   <footer class="site-footer">
-    <div class="container">
-      <p>ИГРОТЕКА</p>
+    <div class="container site-footer__inner">
+      <p class="site-footer__copy">ИГРОТЕКА © <span id="footer-year"></span></p>
+      <nav aria-label="Навигация в подвале">
+        <ul class="site-footer__nav">
+          <li><a href="#catalog">Каталог</a></li>
+          <li><a href="#about">О проекте</a></li>
+        </ul>
+      </nav>
+      <p class="site-footer__note">Цены ориентировочные, данные приведены для демонстрации.</p>
+      <p><a href="https://github.com/axozu/igroteka" target="_blank" rel="noopener noreferrer">Исходный код на GitHub</a></p>
     </div>
   </footer>
 </body>

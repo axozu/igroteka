@@ -35,6 +35,7 @@
   /* Типографика и сетка */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --container: 1280px;
+  --header-height: 60px;
 }
 
 /* Тёмная тема: выбрана явно */
