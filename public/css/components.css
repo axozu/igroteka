@@ -913,6 +913,12 @@ html {
   color: var(--color-text);
 }
 
+/* Открытое окно — колонка: шапка окна на месте, прокручивается только содержимое. */
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+}
+
 .modal::backdrop {
   background: rgb(0 0 0 / 0.5);
 }
@@ -930,8 +936,9 @@ html {
 
 .modal__panel {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  max-height: inherit;
+  min-height: 0;
 }
 
 @media (max-width: 599px) {
@@ -1242,4 +1249,142 @@ html {
   font-size: 4rem;
   font-weight: 800;
   line-height: 1;
+}
+
+/* ---------- 13. Анимации ----------
+   Всё движение — только когда пользователь не просил его уменьшить.
+   При prefers-reduced-motion: reduce эти правила не действуют, интерфейс меняется мгновенно. */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Карточки появляются лесенкой: при загрузке, поиске, фильтрах, смене вкладки. */
+  .card-grid__item {
+    animation: rise-in var(--duration) var(--ease-out) both;
+  }
+
+  .card-grid__item:nth-child(2) { animation-delay: 30ms; }
+  .card-grid__item:nth-child(3) { animation-delay: 60ms; }
+  .card-grid__item:nth-child(4) { animation-delay: 90ms; }
+  .card-grid__item:nth-child(5) { animation-delay: 120ms; }
+  .card-grid__item:nth-child(6) { animation-delay: 150ms; }
+  .card-grid__item:nth-child(7) { animation-delay: 180ms; }
+  .card-grid__item:nth-child(n + 8) { animation-delay: 210ms; }
+
+  .card {
+    transition: box-shadow var(--duration-fast), border-color var(--duration-fast), transform var(--duration-fast) var(--ease-out);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .catalog-message,
+  .chip {
+    animation: fade-in var(--duration) var(--ease-out) both;
+  }
+
+  /* Модальные окна: появление и закрытие (класс is-closing ставит ui/dialog.js). */
+  .modal[open] {
+    animation: pop-in var(--duration) var(--ease-out);
+  }
+
+  .modal.is-closing {
+    animation: pop-out var(--duration-fast) var(--ease-in) forwards;
+  }
+
+  .modal[open]::backdrop,
+  .drawer[open]::backdrop {
+    animation: fade-in var(--duration) var(--ease-out);
+  }
+
+  .modal.is-closing::backdrop,
+  .drawer.is-closing::backdrop {
+    animation: fade-out var(--duration-fast) var(--ease-in) forwards;
+  }
+
+  .drawer[open] .drawer__panel {
+    animation: slide-in-right var(--duration) var(--ease-out);
+  }
+
+  .drawer.is-closing .drawer__panel {
+    animation: slide-out-right var(--duration-fast) var(--ease-in) forwards;
+  }
+
+  .filters.is-open {
+    animation: slide-up var(--duration) var(--ease-out);
+  }
+
+  .site-nav.is-open {
+    animation: drop-down var(--duration-fast) var(--ease-out);
+  }
+
+  .compare-bar:not([hidden]) {
+    animation: slide-up var(--duration) var(--ease-out);
+  }
+
+  .toast {
+    animation: slide-up var(--duration) var(--ease-out);
+  }
+
+  .toast--leaving {
+    animation: fade-out var(--duration-fast) var(--ease-in) forwards;
+  }
+
+  /* Разделы проявляются при прокрутке (класс reveal ставит ui/reveal.js; без JS всё видно сразу). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .advantage.reveal:nth-child(2) { transition-delay: 90ms; }
+  .advantage.reveal:nth-child(3) { transition-delay: 180ms; }
+
+  /* Плавная смена темы: класс на <html> ставится только на время переключения. */
+  .theme-animating,
+  .theme-animating *,
+  .theme-animating *::before,
+  .theme-animating *::after {
+    transition: background-color var(--duration-slow) var(--ease-out), color var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out) !important;
+  }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+
+@keyframes pop-out {
+  to { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+}
+
+@keyframes slide-out-right {
+  to { transform: translateX(100%); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+}
+
+@keyframes drop-down {
+  from { opacity: 0; transform: translateY(-8px); }
 }

@@ -273,17 +273,17 @@
 - Create: `tests/security/no-secrets.test.mjs`, `.github/workflows/pages.yml`, `SECURITY.md`, `docs/checklists/ui.md`, `docs/screenshots/*.png`
 - Modify: `README.md`, любые файлы `public/` по результатам проверки
 
-- [ ] **Шаг 1: `no-secrets.test.mjs`** (§8.6): по файлам из `git ls-files` (через `child_process.execFileSync('git', ['ls-files'])`) — нет `.env`; нет `BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY`; нет `ghp_`, `github_pat_`, `sk-`, `AKIA[0-9A-Z]{16}`; нет base64/hex-строк ≥ 32 символов в одной строке со словами `key|secret|token|password`. Самопроверка на временной строке с поддельным ключом.
-- [ ] **Шаг 2:** FAIL (сканер ещё не написан) → реализовать → PASS.
-- [ ] **Шаг 3: Workflow `.github/workflows/pages.yml`** (§8.7):
+- [x] **Шаг 1: `no-secrets.test.mjs`** (§8.6): по файлам из `git ls-files` (через `child_process.execFileSync('git', ['ls-files'])`) — нет `.env`; нет `BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY`; нет `ghp_`, `github_pat_`, `sk-`, `AKIA[0-9A-Z]{16}`; нет base64/hex-строк ≥ 32 символов в одной строке со словами `key|secret|token|password`. Самопроверка на временной строке с поддельным ключом.
+- [x] **Шаг 2:** FAIL (сканер ещё не написан) → реализовать → PASS.
+- [x] **Шаг 3: Workflow `.github/workflows/pages.yml`** (§8.7):
   - `on: push (branches: [main])`, `pull_request`, `workflow_dispatch`; `permissions: contents: read`; `concurrency: { group: pages, cancel-in-progress: false }`;
   - job `test`: `ubuntu-latest`, checkout → setup-node (`node-version: 24`) → `npm test`;
   - job `deploy`: `needs: test`, `if: github.event_name != 'pull_request'`, `permissions: { pages: write, id-token: write }`, `environment: { name: github-pages, url: ${{ steps.deployment.outputs.page_url }} }`; шаги configure-pages → upload-pages-artifact (`path: public`) → deploy-pages (`id: deployment`);
   - каждое `uses:` — **полный SHA коммита** актуального релиза с комментарием версии (`uses: actions/checkout@<40 символов> # v4.x.x`). SHA брать со страницы релизов соответствующего репозитория `github.com/actions/...`; не выдумывать.
   - Тест в `tests/security/workflow.test.mjs`: каждое `uses:` в `.github/workflows/*.yml` закреплено 40-символьным SHA; есть `needs: test`; на верхнем уровне `permissions: contents: read`.
-- [ ] **Шаг 4: Полный UI-проход** по `docs/checklists/ui.md` (собрать туда чеклисты этапов 5–9 и добавить): 4 ширины × 2 темы; весь сценарий только с клавиатуры; Экранный диктор Windows объявляет «Найдено: N»; zoom 200 %; ландшафт телефона 740×360; Firefox (там нет Trusted Types — сайт работает) и Chrome/Edge.
-- [ ] **Шаг 5: `SECURITY.md`** — меры §8 списком (что закрывает каждая), известные ограничения (нет `frame-ancestors` в meta, Trusted Types только в Chromium), как сообщить о проблеме. **README.md** — описание, ссылка на живой сайт, скриншоты светлой и тёмной темы, возможности, архитектура, запуск (`npm start`, `npm test`), структура, «Цены ориентировочные, данные для демонстрации».
-- [ ] **Шаг 6:** `npm test` → PASS. Коммит `этап 10: полировка, защита, workflow публикации`.
+- [x] **Шаг 4: Полный UI-проход** по `docs/checklists/ui.md` (собрать туда чеклисты этапов 5–9 и добавить): 4 ширины × 2 темы; весь сценарий только с клавиатуры; Экранный диктор Windows объявляет «Найдено: N»; zoom 200 %; ландшафт телефона 740×360; Firefox (там нет Trusted Types — сайт работает) и Chrome/Edge.
+- [x] **Шаг 5: `SECURITY.md`** — меры §8 списком (что закрывает каждая), известные ограничения (нет `frame-ancestors` в meta, Trusted Types только в Chromium), как сообщить о проблеме. **README.md** — описание, ссылка на живой сайт, скриншоты светлой и тёмной темы, возможности, архитектура, запуск (`npm start`, `npm test`), структура, «Цены ориентировочные, данные для демонстрации».
+- [x] **Шаг 6:** `npm test` → PASS. Коммит `этап 10: полировка, защита, workflow публикации`.
 - [ ] **Шаг 7: Публикация — делает заказчик** (Claude Code даёт пошаговую инструкцию и ждёт; без явного согласия ничего не публикует и не пушит):
   1. Создать **публичный** репозиторий `igroteka` на GitHub (без README).
   2. `git remote add origin https://github.com/<логин>/igroteka.git` → `git push -u origin main`.
