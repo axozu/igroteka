@@ -132,12 +132,12 @@
   - `toggleId(ids, id, max = MAX_FAVORITES): string[]`, `pruneUnknown(ids, knownIds: Set): string[]`, `isIdList(v, max): boolean` (guard: массив уникальных строк-id формата §4.1 длиной ≤ max).
   - `MAX_COMPARE = 3`, `toggleCompare(ids, id, max = MAX_COMPARE): { ids, rejected: boolean }`, `getBestValues(games): { rating: string[], price: string[], complexity: string[], time: string[] }`.
 
-- [ ] **Шаг 1: Тесты store:** подписчик получает `(state, prev)`; повтор тех же значений не уведомляет; отписка; функция-патч получает текущее состояние.
-- [ ] **Шаг 2: Тесты URL:** туда-обратно для полностью заполненного состояния; дефолт → `''`; кириллица в `q` кодируется и декодируется; **мусор** `players=abc&genre=xxx,strategy&priceMin=-5&priceMax=1e9&age=7&time=forever&level=9&sort=evil&view=admin&game=<script>` → ровно `{ filters:{genres:['strategy']} }` (при `known.gameIds` без такого id); `q` из 500 символов → обрезан до 100.
-- [ ] **Шаг 3: Тесты persist:** storage с бросающими `getItem`/`setItem` → fallback / `false`, без исключений; битый JSON → fallback; значение не проходит guard (не массив, 101 id, дубли, `"<b>"`) → fallback.
-- [ ] **Шаг 4: Тесты избранного и сравнения:** `toggleId` добавляет в конец и убирает; на 101-м добавлении список не растёт; `pruneUnknown`; `toggleCompare` при 3 id → `rejected:true`, массив не изменён; снятие работает; `getBestValues` на фикстурах, включая равенство.
-- [ ] **Шаг 5:** FAIL → **Шаг 6: реализовать** → **Шаг 7:** `npm test` PASS.
-- [ ] **Ритуал завершения** → `этап 4: состояние, URL, хранение, сравнение` → СТОП.
+- [x] **Шаг 1: Тесты store:** подписчик получает `(state, prev)`; повтор тех же значений не уведомляет; отписка; функция-патч получает текущее состояние.
+- [x] **Шаг 2: Тесты URL:** туда-обратно для полностью заполненного состояния; дефолт → `''`; кириллица в `q` кодируется и декодируется; **мусор** `players=abc&genre=xxx,strategy&priceMin=-5&priceMax=1e9&age=7&time=forever&level=9&sort=evil&view=admin&game=<script>` → ровно `{ filters:{genres:['strategy']} }` (при `known.gameIds` без такого id); `q` из 500 символов → обрезан до 100.
+- [x] **Шаг 3: Тесты persist:** storage с бросающими `getItem`/`setItem` → fallback / `false`, без исключений; битый JSON → fallback; значение не проходит guard (не массив, 101 id, дубли, `"<b>"`) → fallback.
+- [x] **Шаг 4: Тесты избранного и сравнения:** `toggleId` добавляет в конец и убирает; на 101-м добавлении список не растёт; `pruneUnknown`; `toggleCompare` при 3 id → `rejected:true`, массив не изменён; снятие работает; `getBestValues` на фикстурах, включая равенство.
+- [x] **Шаг 5:** FAIL → **Шаг 6: реализовать** → **Шаг 7:** `npm test` PASS.
+- [x] **Ритуал завершения** → `этап 4: состояние, URL, хранение, сравнение` → СТОП.
 
 ## Этап 5. Каталог в интерфейсе
 
