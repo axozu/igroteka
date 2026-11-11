@@ -5,12 +5,304 @@
    1. Шапка (.site-header)            — этап 9
    2. Панель инструментов каталога    — этап 6
    3. Фильтры и лист фильтров         — этап 6
-   4. Сетка и карточка игры           — этап 5
-   5. Скелетоны, ошибка, пустые состояния — этапы 5–7
-   6. Панель избранного               — этап 7
-   7. Модалка игры                    — этап 8
-   8. Сравнение                       — этап 8
-   9. Уведомления (toast)             — этап 7
-   10. «О проекте» (#about)           — этап 9
-   11. Подвал (.site-footer)          — этап 9
+   4. Кнопки и метки
+   5. Сетка и карточка игры           — этап 5
+   6. Скелетоны, ошибка, пустые состояния — этапы 5–7
+   7. Панель избранного               — этап 7
+   8. Модалка игры                    — этап 8
+   9. Сравнение                       — этап 8
+   10. Уведомления (toast)            — этап 7
+   11. «О проекте» (#about)           — этап 9
+   12. Подвал (.site-footer)          — этап 9
 */
+
+/* ---------- 4. Кнопки и метки ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.button:hover {
+  border-color: var(--color-accent);
+}
+
+.button--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.button--ghost[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.icon-button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.icon-button[aria-pressed="true"] {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.tag {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+/* ---------- 5. Сетка и карточка игры ---------- */
+
+.catalog__title {
+  margin-block: var(--space-6) var(--space-4);
+}
+
+.catalog {
+  padding-bottom: var(--space-8);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 1280px) {
+  .card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.card-grid__item {
+  display: flex;
+  min-width: 0;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-hover);
+}
+
+.card__cover {
+  aspect-ratio: 4 / 3;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+}
+
+.cover__title {
+  font-family: var(--font-sans);
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.card__title {
+  font-size: 1.125rem;
+}
+
+/* Кнопка-заголовок растягивается на всю карточку: клик по карточке открывает подробности. */
+.card__open {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-weight: 700;
+  text-align: left;
+}
+
+.card__open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card__open:focus-visible {
+  outline: none;
+}
+
+.card:has(.card__open:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.card__year,
+.card__meta {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.card__genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: 0;
+  list-style: none;
+}
+
+.card__numbers {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.card__rating {
+  font-weight: 600;
+}
+
+.card__price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Кнопки действий — над растянутой кнопкой-заголовком. */
+.card__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.card__compare {
+  flex: 1;
+}
+
+/* ---------- 6. Скелетоны, ошибка, пустые состояния ---------- */
+
+.card--skeleton {
+  pointer-events: none;
+}
+
+.card--skeleton:hover {
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+
+.skeleton {
+  border-radius: var(--radius-s);
+  background: var(--color-border);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton--cover {
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+}
+
+.skeleton--title {
+  width: 70%;
+  height: var(--space-6);
+}
+
+.skeleton--line {
+  width: 100%;
+  height: var(--space-4);
+}
+
+.skeleton--short {
+  width: 45%;
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+.catalog-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+}
+
+.catalog-message--error {
+  border-color: var(--color-danger);
+}
+
+.catalog-message__title {
+  font-size: 1.25rem;
+}

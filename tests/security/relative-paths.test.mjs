@@ -18,6 +18,14 @@ const ABSOLUTE_PATTERNS = [
 
 // Единственный разрешённый внешний адрес — репозиторий на GitHub (подвал, этап 9).
 const ALLOWED_HTTPS = /^https:\/\/github\.com\//;
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+test('самопроверка: разрешён только точный адрес пространства имён SVG', () => {
+  const strip = (s) => s.replaceAll(`'${SVG_NS}'`, '');
+  assert.doesNotMatch(strip(`const NS = '${SVG_NS}';`), /http:\/\//);
+  assert.match(strip(`fetch('${SVG_NS}/evil')`), /http:\/\//);
+  assert.match(strip("img.src = 'http://evil.example/x.png'"), /http:\/\//);
+});
 
 test('в public/ есть файлы для проверки', () => {
   assert.ok(files.length > 0, 'не найдено ни одного .html/.css/.js в public/');
@@ -34,7 +42,9 @@ for (const file of files) {
   });
 
   test(`${name}: нет http:// и посторонних https://`, () => {
-    assert.doesNotMatch(text, /http:\/\//i, 'найден http://');
+    // Пространство имён SVG — идентификатор для createElementNS, а не сетевой адрес.
+    const withoutSvgNs = text.replaceAll(`'${SVG_NS}'`, '');
+    assert.doesNotMatch(withoutSvgNs, /http:\/\//i, 'найден http://');
     for (const url of text.match(/https:\/\/[^\s"'`)<>]+/gi) ?? []) {
       assert.match(url, ALLOWED_HTTPS, `внешний адрес ${url}`);
     }
