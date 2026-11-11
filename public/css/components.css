@@ -779,3 +779,235 @@
   background: var(--color-danger);
   color: var(--color-surface);
 }
+
+/* ---------- 8. Модалка игры ---------- */
+
+.modal {
+  width: min(100% - var(--space-8), 880px);
+  max-height: calc(100% - var(--space-8));
+  /* Сброс * { margin: 0 } отменяет штатное центрирование <dialog> — возвращаем его. */
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+@media (max-width: 599px) {
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.modal__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+@media (max-width: 599px) {
+  .modal__panel {
+    height: 100%;
+  }
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.modal__title {
+  font-size: 1.375rem;
+  overflow-wrap: anywhere;
+}
+
+.modal__content {
+  display: grid;
+  gap: var(--space-5);
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .modal__content {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    padding: var(--space-6);
+  }
+
+  .modal__content--table {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.modal__cover {
+  overflow: hidden;
+  align-self: start;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  aspect-ratio: 4 / 3;
+}
+
+.modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.modal__subtitle {
+  color: var(--color-text-muted);
+}
+
+.modal__description {
+  line-height: 1.6;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+.facts__item {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facts__term {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.facts__value {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.modal__favorite[aria-pressed="true"] {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+/* ---------- 9. Сравнение ---------- */
+
+.compare-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-hover);
+}
+
+.compare-bar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-block: var(--space-3);
+}
+
+.compare-bar__text {
+  min-width: 0;
+}
+
+.compare-bar__names {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.compare-bar__hint {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.compare-bar__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.button:disabled {
+  border-color: var(--color-border);
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* Плашка не должна закрывать низ страницы и уведомления. */
+.has-compare-bar body {
+  padding-bottom: calc(var(--space-8) * 4);
+}
+
+.has-compare-bar .toast-region {
+  bottom: calc(var(--space-8) * 4);
+}
+
+.table-scroll {
+  /* Привязка для .visually-hidden внутри ячеек: иначе они раздвигают всё окно. */
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+}
+
+.compare-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.compare-table thead th {
+  font-size: 1rem;
+}
+
+/* Первая колонка закреплена при горизонтальной прокрутке. */
+.compare-table th[scope="row"],
+.compare-table__corner {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 120px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.compare-table td.is-best {
+  box-shadow: inset 3px 0 0 var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 700;
+}
