@@ -111,6 +111,11 @@ a {
   border: 0;
 }
 
+/* Атрибут hidden сильнее любых display из компонентов */
+[hidden] {
+  display: none !important;
+}
+
 /* Фокус с клавиатуры */
 :focus-visible {
   outline: 2px solid var(--color-accent);

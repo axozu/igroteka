@@ -16,6 +16,281 @@
    12. Подвал (.site-footer)          — этап 9
 */
 
+/* ---------- 2. Поиск и панель инструментов каталога ---------- */
+
+.input,
+.select {
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.input:hover,
+.select:hover {
+  border-color: var(--color-text-muted);
+}
+
+.search {
+  margin-bottom: var(--space-4);
+}
+
+.search__input {
+  width: 100%;
+  max-width: 480px;
+}
+
+.catalog-layout {
+  display: block;
+}
+
+.catalog-main {
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.toolbar__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.toolbar__row--chips {
+  justify-content: flex-start;
+}
+
+.toolbar__found {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.toolbar__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.toolbar__sort-label {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+}
+
+.segmented__button {
+  min-height: 36px;
+  padding: var(--space-1) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.segmented__button[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.segmented__count {
+  font-weight: 400;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+.chip:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.chip__x {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+/* ---------- 3. Фильтры и лист фильтров ---------- */
+
+/* До 1024 px панель скрыта и открывается полноэкранным листом. */
+.filters {
+  display: none;
+}
+
+.filters.is-open {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.is-locked {
+  overflow: hidden;
+}
+
+.filters__header,
+.filters__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+}
+
+.filters__header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filters__footer {
+  border-top: 1px solid var(--color-border);
+}
+
+.filters__show {
+  flex: 1;
+}
+
+.filters__title {
+  font-size: 1.25rem;
+}
+
+.filters__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.filter-group {
+  min-width: 0;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  border: 0;
+}
+
+.filter-group__title {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-weight: 700;
+}
+
+.filter-group__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  cursor: pointer;
+}
+
+.option__input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.option__count {
+  color: var(--color-text-muted);
+}
+
+.price-range {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.price-field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.price-field__label {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.price-field .input {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .catalog-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .filters {
+    position: sticky;
+    top: var(--space-4);
+    display: block;
+    max-height: calc(100vh - var(--space-8));
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-l);
+    background: var(--color-surface);
+  }
+
+  .filters__header {
+    border-radius: var(--radius-l) var(--radius-l) 0 0;
+  }
+
+  /* Специфичность выше, чем у .button / .icon-button, которые объявлены ниже. */
+  .filters .filters__close,
+  .filters .filters__footer,
+  .toolbar .toolbar__filters {
+    display: none;
+  }
+
+  .filter-group__options {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
 /* ---------- 4. Кнопки и метки ---------- */
 
 .button {
@@ -305,4 +580,20 @@
 
 .catalog-message__title {
   font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.catalog-message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.button--link {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-2);
+  border-color: transparent;
+  background: none;
+  color: var(--color-accent);
+  text-decoration: underline;
 }

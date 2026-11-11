@@ -1,7 +1,8 @@
-// Сетка каталога и её состояния: загрузка, ошибка, готово (§6.3). Пустые состояния — этап 6.
+// Сетка каталога и её состояния (§6.3): загрузка, ошибка, пустой результат, готово.
 import { h, clear } from './dom.js';
 import { renderCard } from './card.js';
 import { selectVisibleGames } from '../logic/catalog.js';
+import { countActiveFilters, DEFAULT_FILTERS } from '../logic/filter.js';
 
 const SKELETON_COUNT = 8;
 
@@ -32,6 +33,28 @@ function renderError(onRetry) {
   );
 }
 
+function renderEmpty(state, store) {
+  const query = state.query.trim();
+  const hasFilters = countActiveFilters(state.filters) > 0;
+  let text = 'Здесь пока нет игр';
+  if (query !== '') text = `По запросу «${query}» ничего не найдено`;
+  else if (hasFilters) text = 'Под выбранные фильтры игр нет';
+  return h(
+    'div',
+    { class: 'catalog-message' },
+    h('h2', { class: 'catalog-message__title' }, text),
+    h(
+      'div',
+      { class: 'catalog-message__actions' },
+      query !== '' && h('button', { class: 'button button--primary', type: 'button', on: { click: () => store.setState({ query: '' }) } }, 'Сбросить поиск'),
+      hasFilters && h('button', {
+        class: 'button', type: 'button',
+        on: { click: () => store.setState({ filters: { ...DEFAULT_FILTERS, genres: [], time: [], complexity: [] } }) },
+      }, 'Сбросить фильтры'),
+    ),
+  );
+}
+
 /**
  * Подключает каталог к хранилищу. Сетка перерисовывается только при смене статуса
  * или списка видимых id; клики по карточкам обрабатываются делегированием.
@@ -56,7 +79,10 @@ export function mountCatalog(root, store, { onRetry, onAction = () => {} }) {
 
   function render(state) {
     const visible = state.status === 'ready' ? selectVisibleGames(state) : [];
-    const key = `${state.status}|${visible.map((g) => g.id).join(',')}`;
+    const ids = visible.map((g) => g.id).join(',');
+    // Для пустого результата текст зависит от запроса и наличия фильтров.
+    const emptyKey = state.status === 'ready' && visible.length === 0 ? `|${state.query.trim()}|${countActiveFilters(state.filters) > 0}` : '';
+    const key = `${state.status}|${ids}${emptyKey}`;
     if (key === lastKey) return;
     lastKey = key;
 
@@ -77,6 +103,10 @@ export function mountCatalog(root, store, { onRetry, onAction = () => {} }) {
     }
 
     status.textContent = '';
+    if (visible.length === 0) {
+      message.append(renderEmpty(state, store));
+      return;
+    }
     const genresById = new Map(state.genres.map((g) => [g.id, g.name]));
     const favorites = new Set(state.favorites);
     const compare = new Set(state.compare);
