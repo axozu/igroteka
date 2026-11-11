@@ -36,7 +36,12 @@ const STRING_RULES = {
 const isPlainObject = (v) => typeof v === 'object' && v !== null && !Array.isArray(v);
 const isInt = (v) => Number.isInteger(v);
 const intIn = (v, min, max) => isInt(v) && v >= min && v <= max;
-const isValidId = (v) => typeof v === 'string' && v.length <= ID_MAX && ID_RE.test(v);
+/**
+ * Строка-id формата §4.1: `^[a-z0-9]+(-[a-z0-9]+)*$`, не длиннее 40 символов.
+ * @param {unknown} v
+ * @returns {boolean}
+ */
+export const isValidId = (v) => typeof v === 'string' && v.length <= ID_MAX && ID_RE.test(v);
 
 /** Ошибки из-за лишних полей объекта. */
 function extraKeys(obj, allowed) {
