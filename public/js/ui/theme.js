@@ -20,7 +20,13 @@ export function mountThemeToggle(button, store, storage) {
   const icon = button.querySelector('.theme-icon');
   store.setState({ theme: readJSON(storage, STORAGE_KEYS.theme, 'system', isTheme) });
 
+  let animationTimer = null;
   button.addEventListener('click', () => {
+    // Плавный переход цветов только на время переключения (CSS — при no-preference).
+    const root = document.documentElement;
+    root.classList.add('theme-animating');
+    clearTimeout(animationTimer);
+    animationTimer = setTimeout(() => root.classList.remove('theme-animating'), 600);
     const theme = nextTheme(store.getState().theme);
     store.setState({ theme });
     writeJSON(storage, STORAGE_KEYS.theme, theme);

@@ -10,6 +10,7 @@ import { createFavoritesService } from './favorites-service.js';
 import { mountHeader, mountHeaderFavorites } from './ui/header.js';
 import { mountThemeToggle } from './ui/theme.js';
 import { mountAbout } from './ui/about.js';
+import { mountReveal } from './ui/reveal.js';
 import { mountFavoritesDrawer } from './ui/favorites-drawer.js';
 import { showToast } from './ui/toast.js';
 import { createCompareService } from './compare-service.js';
@@ -66,5 +67,6 @@ mountCatalog(document.getElementById('catalog-root'), store, { onRetry: load, on
 mountGameModal(document.getElementById('game-modal'), store, onCardAction);
 mountCompare(document.getElementById('compare-bar'), document.getElementById('compare-dialog'), store, compare);
 mountAbout(document.getElementById('about-stats'), store);
+mountReveal(document.querySelectorAll('[data-reveal]'));
 document.getElementById('footer-year').textContent = String(new Date().getFullYear());
 load();
