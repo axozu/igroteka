@@ -43,8 +43,24 @@ export function startUrlSync(store, { history, location, window }) {
   normalizeAddress();
   let lastWithoutSearch = withoutSearch(store.getState());
 
-  const unsubscribe = store.subscribe((state) => {
+  // До загрузки каталога id игры из адреса проверить нельзя. Когда игры появились,
+  // неизвестный id сбрасывается, а адрес исправляется без новой записи истории.
+  let droppingUnknownGame = false;
+
+  const unsubscribe = store.subscribe((state, prev) => {
     if (restoring) return;
+    if (droppingUnknownGame) {
+      droppingUnknownGame = false;
+      normalizeAddress();
+      lastWithoutSearch = withoutSearch(state);
+      return;
+    }
+    if (state.games !== prev.games && state.games.length > 0 && state.openGameId !== null
+      && !state.games.some((g) => g.id === state.openGameId)) {
+      droppingUnknownGame = true;
+      store.setState({ openGameId: null });
+      return;
+    }
     const query = stateToQuery(state);
     if (query === currentQuery()) return;
     const next = withoutSearch(state);

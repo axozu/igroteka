@@ -1,6 +1,7 @@
 // Панель избранного (§6.2): выезжает справа, на телефоне — на всю ширину.
 // Построена на <dialog> + showModal(): фон неактивен, Esc закрывает штатно.
-import { h, clear, trapFocus } from './dom.js';
+import { h, clear } from './dom.js';
+import { bindDialog } from './dialog.js';
 import { renderCover } from './cover.js';
 import { formatPrice, pluralize } from '../logic/format.js';
 
@@ -49,14 +50,8 @@ export function mountFavoritesDrawer(dialog, store, favorites, { returnFocusTo }
   dialog.setAttribute('aria-labelledby', 'favorites-title');
   dialog.append(panel);
 
-  // Клик по фону (вне панели) закрывает; Esc → событие cancel → закрываем через состояние.
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) close();
-  });
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    close();
-  });
+  // Клик по фону и Esc закрывают через состояние.
+  const modal = bindDialog(dialog, close);
 
   list.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-remove]');
@@ -91,21 +86,9 @@ export function mountFavoritesDrawer(dialog, store, favorites, { returnFocusTo }
     empty.hidden = games.length > 0;
   }
 
-  let releaseFocus = null;
   function applyOpen(open) {
-    if (open === dialog.open) return;
-    if (open) {
-      dialog.showModal();
-      document.documentElement.classList.add('is-locked');
-      releaseFocus = trapFocus(dialog);
-      closeButton.focus();
-    } else {
-      dialog.close();
-      document.documentElement.classList.remove('is-locked');
-      releaseFocus?.();
-      releaseFocus = null;
-      returnFocusTo.focus();
-    }
+    if (open) modal.open(closeButton);
+    else modal.close(returnFocusTo);
   }
 
   function render(state, prev) {

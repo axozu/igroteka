@@ -109,6 +109,29 @@ test('после загрузки каталога жанры проверяют
   assert.deepEqual(store.getState().filters.genres, ['coop']);
 });
 
+test('?game=id открывает игру; после загрузки каталога неизвестный id убирается без записи в историю', () => {
+  const known = setup('?game=azul');
+  assert.equal(known.store.getState().openGameId, 'azul');
+  known.store.setState({ status: 'ready', games: [{ id: 'azul' }] });
+  assert.equal(known.store.getState().openGameId, 'azul');
+  assert.deepEqual(known.calls, []);
+
+  const unknown = setup('?genre=coop&game=nope');
+  unknown.store.setState({ status: 'ready', games: [{ id: 'azul' }] });
+  assert.equal(unknown.store.getState().openGameId, null);
+  assert.deepEqual(unknown.calls, [['replace', '/igroteka/?genre=coop']]);
+  assert.deepEqual(unknown.store.getState().filters.genres, ['coop'], 'остальное состояние не тронуто');
+});
+
+test('открытие и закрытие игры → pushState, «Назад» закрывает', () => {
+  const { store, calls, back } = setup();
+  store.setState({ status: 'ready', games: [{ id: 'azul' }] });
+  store.setState({ openGameId: 'azul' });
+  assert.deepEqual(calls, [['push', '/igroteka/?game=azul']]);
+  back('');
+  assert.equal(store.getState().openGameId, null);
+});
+
 test('возвращает функцию остановки', () => {
   const browser = fakeBrowser();
   const store = createStore(createInitialState());

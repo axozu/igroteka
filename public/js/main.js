@@ -10,6 +10,9 @@ import { createFavoritesService } from './favorites-service.js';
 import { mountHeaderFavorites } from './ui/header.js';
 import { mountFavoritesDrawer } from './ui/favorites-drawer.js';
 import { showToast } from './ui/toast.js';
+import { createCompareService } from './compare-service.js';
+import { mountGameModal } from './ui/modal.js';
+import { mountCompare } from './ui/compare.js';
 
 /** localStorage может быть недоступен (приватный режим, запрет cookie) — тогда работаем в памяти. */
 function getStorage() {
@@ -22,13 +25,18 @@ function getStorage() {
 
 const store = createStore(createInitialState());
 startUrlSync(store, { history: window.history, location: window.location, window });
-const favorites = createFavoritesService(store, getStorage(), window);
+const storage = getStorage();
+const favorites = createFavoritesService(store, storage, window);
+const compare = createCompareService(store, storage);
 
-/** Действия кнопок на карточках (делегирование из каталога). */
+/** Действия кнопок карточек и модалки: open, favorite, compare. */
 function onCardAction(action, id) {
-  if (action === 'favorite') {
-    const { rejected } = favorites.toggle(id);
-    if (rejected) showToast('В избранном может быть не больше 100 игр');
+  if (action === 'open') {
+    store.setState({ openGameId: id });
+  } else if (action === 'favorite') {
+    if (favorites.toggle(id).rejected) showToast('В избранном может быть не больше 100 игр');
+  } else if (action === 'compare') {
+    if (compare.toggle(id).rejected) showToast('Можно сравнить не больше 3 игр');
   }
 }
 
@@ -51,4 +59,6 @@ const favoritesButton = document.getElementById('favorites-button');
 mountHeaderFavorites(favoritesButton, document.getElementById('favorites-count'), store);
 mountFavoritesDrawer(document.getElementById('favorites-drawer'), store, favorites, { returnFocusTo: favoritesButton });
 mountCatalog(document.getElementById('catalog-root'), store, { onRetry: load, onAction: onCardAction });
+mountGameModal(document.getElementById('game-modal'), store, onCardAction);
+mountCompare(document.getElementById('compare-bar'), document.getElementById('compare-dialog'), store, compare);
 load();
