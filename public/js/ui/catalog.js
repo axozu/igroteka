@@ -1,6 +1,6 @@
 // Сетка каталога и её состояния (§6.3): загрузка, ошибка, пустой результат, готово.
 import { h, clear } from './dom.js';
-import { renderCard } from './card.js';
+import { renderCard, updateCardToggles } from './card.js';
 import { selectVisibleGames } from '../logic/catalog.js';
 import { countActiveFilters, DEFAULT_FILTERS } from '../logic/filter.js';
 
@@ -33,7 +33,23 @@ function renderError(onRetry) {
   );
 }
 
+const EMPTY_FAVORITES = 'Вы пока ничего не добавили в избранное';
+
+/** Сколько игр из избранного есть в каталоге. */
+const knownFavorites = (state) => {
+  const ids = new Set(state.games.map((g) => g.id));
+  return state.favorites.filter((id) => ids.has(id)).length;
+};
+
 function renderEmpty(state, store) {
+  if (state.view === 'favorites' && knownFavorites(state) === 0) {
+    return h(
+      'div',
+      { class: 'catalog-message' },
+      h('h2', { class: 'catalog-message__title' }, EMPTY_FAVORITES),
+      h('button', { class: 'button button--primary', type: 'button', on: { click: () => store.setState({ view: 'all' }) } }, 'Перейти в каталог'),
+    );
+  }
   const query = state.query.trim();
   const hasFilters = countActiveFilters(state.filters) > 0;
   let text = 'Здесь пока нет игр';
@@ -77,13 +93,28 @@ export function mountCatalog(root, store, { onRetry, onAction = () => {} }) {
 
   let lastKey = null;
 
-  function render(state) {
+  /** ♥ и «Сравнить» обновляются на месте, без перерисовки сетки. */
+  function syncToggles(state) {
+    const favorites = new Set(state.favorites);
+    const compare = new Set(state.compare);
+    for (const card of grid.querySelectorAll('article.card[data-id]')) {
+      const { id } = card.dataset;
+      updateCardToggles(card, { isFavorite: favorites.has(id), inCompare: compare.has(id) });
+    }
+  }
+
+  function render(state, prev) {
     const visible = state.status === 'ready' ? selectVisibleGames(state) : [];
     const ids = visible.map((g) => g.id).join(',');
     // Для пустого результата текст зависит от запроса и наличия фильтров.
-    const emptyKey = state.status === 'ready' && visible.length === 0 ? `|${state.query.trim()}|${countActiveFilters(state.filters) > 0}` : '';
+    const emptyKey = state.status === 'ready' && visible.length === 0
+      ? `|${state.view}|${knownFavorites(state) === 0}|${state.query.trim()}|${countActiveFilters(state.filters) > 0}`
+      : '';
     const key = `${state.status}|${ids}${emptyKey}`;
-    if (key === lastKey) return;
+    if (key === lastKey) {
+      if (prev && (state.favorites !== prev.favorites || state.compare !== prev.compare)) syncToggles(state);
+      return;
+    }
     lastKey = key;
 
     clear(message);
@@ -122,5 +153,5 @@ export function mountCatalog(root, store, { onRetry, onAction = () => {} }) {
   }
 
   store.subscribe(render);
-  render(store.getState());
+  render(store.getState(), null);
 }

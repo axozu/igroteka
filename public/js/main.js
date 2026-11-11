@@ -6,9 +6,31 @@ import { mountCatalog } from './ui/catalog.js';
 import { mountSearch } from './ui/search.js';
 import { mountFilters } from './ui/filters.js';
 import { mountToolbar } from './ui/toolbar.js';
+import { createFavoritesService } from './favorites-service.js';
+import { mountHeaderFavorites } from './ui/header.js';
+import { mountFavoritesDrawer } from './ui/favorites-drawer.js';
+import { showToast } from './ui/toast.js';
+
+/** localStorage может быть недоступен (приватный режим, запрет cookie) — тогда работаем в памяти. */
+function getStorage() {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
 
 const store = createStore(createInitialState());
 startUrlSync(store, { history: window.history, location: window.location, window });
+const favorites = createFavoritesService(store, getStorage(), window);
+
+/** Действия кнопок на карточках (делегирование из каталога). */
+function onCardAction(action, id) {
+  if (action === 'favorite') {
+    const { rejected } = favorites.toggle(id);
+    if (rejected) showToast('В избранном может быть не больше 100 игр');
+  }
+}
 
 async function load() {
   store.setState({ status: 'loading', error: null });
@@ -25,5 +47,8 @@ async function load() {
 mountSearch(document.getElementById('search-input'), store);
 mountFilters(document.getElementById('filters'), store);
 mountToolbar(document.getElementById('toolbar'), store);
-mountCatalog(document.getElementById('catalog-root'), store, { onRetry: load });
+const favoritesButton = document.getElementById('favorites-button');
+mountHeaderFavorites(favoritesButton, document.getElementById('favorites-count'), store);
+mountFavoritesDrawer(document.getElementById('favorites-drawer'), store, favorites, { returnFocusTo: favoritesButton });
+mountCatalog(document.getElementById('catalog-root'), store, { onRetry: load, onAction: onCardAction });
 load();
