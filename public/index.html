@@ -13,6 +13,43 @@
   <link rel="stylesheet" href="./css/tokens.css">
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/components.css">
+  <!-- Все модули заранее: браузер качает их параллельно, а не цепочкой по импортам. Список сверяет tests/pages.test.mjs. -->
+  <link rel="modulepreload" href="./js/api.js">
+  <link rel="modulepreload" href="./js/compare-service.js">
+  <link rel="modulepreload" href="./js/favorites-service.js">
+  <link rel="modulepreload" href="./js/logic/active-filters.js">
+  <link rel="modulepreload" href="./js/logic/catalog.js">
+  <link rel="modulepreload" href="./js/logic/compare.js">
+  <link rel="modulepreload" href="./js/logic/favorites.js">
+  <link rel="modulepreload" href="./js/logic/filter.js">
+  <link rel="modulepreload" href="./js/logic/format.js">
+  <link rel="modulepreload" href="./js/logic/normalize.js">
+  <link rel="modulepreload" href="./js/logic/persist.js">
+  <link rel="modulepreload" href="./js/logic/search.js">
+  <link rel="modulepreload" href="./js/logic/sort.js">
+  <link rel="modulepreload" href="./js/logic/stats.js">
+  <link rel="modulepreload" href="./js/logic/theme.js">
+  <link rel="modulepreload" href="./js/logic/url-state.js">
+  <link rel="modulepreload" href="./js/logic/validate.js">
+  <link rel="modulepreload" href="./js/main.js">
+  <link rel="modulepreload" href="./js/store.js">
+  <link rel="modulepreload" href="./js/ui/about.js">
+  <link rel="modulepreload" href="./js/ui/card.js">
+  <link rel="modulepreload" href="./js/ui/catalog.js">
+  <link rel="modulepreload" href="./js/ui/compare.js">
+  <link rel="modulepreload" href="./js/ui/cover.js">
+  <link rel="modulepreload" href="./js/ui/dialog.js">
+  <link rel="modulepreload" href="./js/ui/dom.js">
+  <link rel="modulepreload" href="./js/ui/favorites-drawer.js">
+  <link rel="modulepreload" href="./js/ui/filters.js">
+  <link rel="modulepreload" href="./js/ui/header.js">
+  <link rel="modulepreload" href="./js/ui/modal.js">
+  <link rel="modulepreload" href="./js/ui/reveal.js">
+  <link rel="modulepreload" href="./js/ui/search.js">
+  <link rel="modulepreload" href="./js/ui/theme.js">
+  <link rel="modulepreload" href="./js/ui/toast.js">
+  <link rel="modulepreload" href="./js/ui/toolbar.js">
+  <link rel="modulepreload" href="./js/url-sync.js">
   <script type="module" src="./js/main.js"></script>
 </head>
 <body>
@@ -27,7 +64,12 @@
           <li><a class="site-nav__link" href="#about">О проекте</a></li>
         </ul>
       </nav>
-      <div id="header-search-slot" class="site-header__search"></div>
+      <div id="header-search-slot" class="site-header__search">
+        <div class="search">
+      <label class="visually-hidden" for="search-input">Поиск по названию</label>
+      <input id="search-input" class="input search__input" type="search" placeholder="Поиск по названию" autocomplete="off" enterkeyhint="search" maxlength="100">
+    </div>
+      </div>
       <div class="site-header__actions">
         <button id="theme-toggle" class="icon-button" type="button" aria-label="Тема: как в системе">
           <span class="theme-icon" aria-hidden="true">◐</span>
@@ -50,12 +92,7 @@
 
   <main id="catalog" class="container" aria-labelledby="catalog-title">
     <h1 id="catalog-title" class="catalog__title">Каталог настольных игр</h1>
-    <div id="catalog-search-slot" class="catalog-search-slot">
-      <div class="search">
-        <label class="visually-hidden" for="search-input">Поиск по названию</label>
-        <input id="search-input" class="input search__input" type="search" placeholder="Поиск по названию" autocomplete="off" enterkeyhint="search" maxlength="100">
-      </div>
-    </div>
+    <div id="catalog-search-slot" class="catalog-search-slot"></div>
     <div class="catalog-layout">
       <aside id="filters" class="filters" aria-label="Фильтры"></aside>
       <div class="catalog-main">

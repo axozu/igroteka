@@ -137,8 +137,14 @@ html {
   color: var(--color-accent);
 }
 
-.site-header__search:empty {
+/* Поле поиска одно: до 767 px оно в каталоге, от 768 px — в шапке (переносит ui/header.js). */
+.site-header__search {
   display: none;
+}
+
+/* Место под поле в каталоге зарезервировано заранее — перенос не сдвигает вёрстку. */
+.catalog-search-slot {
+  min-height: calc(40px + var(--space-4));
 }
 
 .theme-icon {
@@ -164,8 +170,13 @@ html {
   }
 
   .site-header__search {
+    display: block;
     flex: 1;
     max-width: 420px;
+  }
+
+  .catalog-search-slot {
+    display: none;
   }
 
   .site-header__search .search {
@@ -450,6 +461,11 @@ html {
     flex-direction: column;
     gap: 0;
   }
+
+  /* 6 жанров по 32 px появляются после загрузки — место под них заранее. */
+  .filter-group__options--genres {
+    min-height: calc(var(--space-8) * 6);
+  }
 }
 
 /* ---------- 4. Кнопки и метки ---------- */
@@ -528,6 +544,12 @@ html {
 
 .catalog {
   padding-bottom: var(--space-8);
+}
+
+/* Пока JS не отрисовал каталог, держим место: иначе «О проекте» успевает показаться
+   на первом экране и потом резко уезжает вниз (сдвиг вёрстки, CLS). */
+.catalog:empty {
+  min-height: 100vh;
 }
 
 .card-grid {

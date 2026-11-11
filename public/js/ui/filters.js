@@ -41,7 +41,7 @@ export function mountFilters(root, store) {
   const close = () => store.setState({ filtersSheetOpen: false });
   const titleId = 'filters-title';
   const closeButton = h('button', { class: 'icon-button filters__close', type: 'button', 'aria-label': 'Закрыть фильтры', on: { click: close } }, '×');
-  const genreOptions = h('div', { class: 'filter-group__options' });
+  const genreOptions = h('div', { class: 'filter-group__options filter-group__options--genres' });
   const showButton = h('button', { class: 'button button--primary filters__show', type: 'button', on: { click: close } });
 
   root.append(
